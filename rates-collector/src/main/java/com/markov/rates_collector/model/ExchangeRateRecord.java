@@ -10,11 +10,11 @@ import java.util.List;
 @Table(name = "exchange_rates_record")
 public class ExchangeRateRecord {
     private String id;
-    private ExchangeRateRequestStatus requestStatus;
+    private boolean success;
     private long timestamp;
     private String base;
     private LocalDate date;
-    private List<ExchangeRate> exchangeRates;
+    private List<ExchangeRate> rates;
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -27,12 +27,13 @@ public class ExchangeRateRecord {
     }
 
     @OneToMany(cascade = CascadeType.ALL)
-    public List<ExchangeRate> getExchangeRates() {
-        return exchangeRates;
+    public List<ExchangeRate> getRates() {
+        return rates;
     }
 
-    public void setExchangeRates(List<ExchangeRate> exchangeRates) {
-        this.exchangeRates = exchangeRates;
+    public ExchangeRateRecord setRates(List<ExchangeRate> rates) {
+        this.rates = rates;
+        return this;
     }
 
     @Column(name = "date")
@@ -40,8 +41,9 @@ public class ExchangeRateRecord {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public ExchangeRateRecord setDate(LocalDate date) {
         this.date = date;
+        return this;
     }
 
     @Column(name = "base_currency", nullable = false)
@@ -49,8 +51,9 @@ public class ExchangeRateRecord {
         return base;
     }
 
-    public void setBase(String base) {
+    public ExchangeRateRecord setBase(String base) {
         this.base = base;
+        return this;
     }
 
     @Column(name = "timestamp")
@@ -58,17 +61,30 @@ public class ExchangeRateRecord {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public ExchangeRateRecord setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+        return this;
     }
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "request_status")
-    public ExchangeRateRequestStatus getRequestStatus() {
-        return requestStatus;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setRequestStatus(ExchangeRateRequestStatus requestStatus) {
-        this.requestStatus = requestStatus;
+    public ExchangeRateRecord setSuccess(boolean success) {
+        this.success = success;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ExchangeRateRecord{" +
+                "id='" + id + '\'' +
+                ", success=" + success +
+                ", timestamp=" + timestamp +
+                ", base='" + base + '\'' +
+                ", date=" + date +
+                ", rates=" + rates +
+                '}';
     }
 }

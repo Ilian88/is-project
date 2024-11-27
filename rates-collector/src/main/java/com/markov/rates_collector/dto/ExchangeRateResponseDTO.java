@@ -1,15 +1,16 @@
 package com.markov.rates_collector.dto;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Map;
 
 //TODO: validation on the DTO
 public class ExchangeRateResponseDTO {
     private boolean success;
     private long timestamp;
-    private String baseCurrency;
-    private LocalDate date;
-    private List<ExchangeRateDTO> rates;
+    private String base;
+    private String date;
+    private Map<String, BigDecimal> rates;
+
 
     public boolean isSuccess() {
         return success;
@@ -27,27 +28,40 @@ public class ExchangeRateResponseDTO {
         this.timestamp = timestamp;
     }
 
-    public List<ExchangeRateDTO> getRates() {
+    public Map<String, BigDecimal> getRates() {
         return rates;
     }
 
-    public void setRates(List<ExchangeRateDTO> rates) {
+    public void setRates(Map<String, BigDecimal> rates) {
         this.rates = rates;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getBaseCurrency() {
-        return baseCurrency;
+    public String getBase() {
+        return base;
     }
 
-    public void setBaseCurrency(String baseCurrency) {
-        this.baseCurrency = baseCurrency;
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "ExchangeRateResponseDTO{" +
+                "success=" + success +
+                ", timestamp=" + timestamp +
+                ", baseCurrency='" + base + '\'' +
+                ", date=" + date +
+                ", rates=" + rates +
+                '}';
     }
 }

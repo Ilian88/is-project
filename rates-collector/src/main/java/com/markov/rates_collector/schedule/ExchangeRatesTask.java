@@ -1,34 +1,44 @@
 package com.markov.rates_collector.schedule;
 
 import com.markov.rates_collector.dto.ExchangeRateResponseDTO;
+import com.markov.rates_collector.service.ExchangeRateService;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class ExchangeRatesTask {
+    private static final Logger logger = LogManager.getLogger(ExchangeRatesTask.class);
     private static final String EXCHANGE_RATE_SUPPLIER_URL = "http://data.fixer.io/api/latest";
+    private static final String ACCESS_KEY = "c59d72fab8d648f373b203fae218e79c"; //TODO: move to properties file
 
+    private final ExchangeRateService exchangeRateService;
     private final RestTemplate restTemplate;
 
 
-    public ExchangeRatesTask(RestTemplate restTemplate) {
+    public ExchangeRatesTask(ExchangeRateService exchangeRateService, RestTemplate restTemplate) {
+        this.exchangeRateService = exchangeRateService;
         this.restTemplate = restTemplate;
     }
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+//    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "* * * * * *")
     public void getExchangeRates(){
-        restTemplate.getForObject(buildUri(), ExchangeRateResponseDTO.class);
+        logger.log(Level.INFO, "Sending exchange rates request to fixer.io");
+
+        ExchangeRateResponseDTO exchangeRateDTO = restTemplate.getForObject(buildUri(), ExchangeRateResponseDTO.class);
+        logger.log(Level.INFO,  String.format("Exchange rates response is: %s", exchangeRateDTO.toString()));
+
+        exchangeRateService.saveRates(exchangeRateDTO);
     }
 
     private String buildUri() {
         return UriComponentsBuilder.fromUriString(EXCHANGE_RATE_SUPPLIER_URL)
-                .queryParam("access_key", "").toUriString(); //TODO: add the access key
+                .queryParam("access_key", ACCESS_KEY).toUriString();
     }
 }

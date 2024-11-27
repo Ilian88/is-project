@@ -13,6 +13,11 @@ public class ExchangeRate {
     private String currency;
     private BigDecimal rate;
 
+    public ExchangeRate(String currency, BigDecimal rate) {
+        this.currency = currency;
+        this.rate = rate;
+    }
+
     @Id
     @Column(name = "currency", nullable = false)
     public String getCurrency() {
