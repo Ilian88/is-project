@@ -1,15 +1,14 @@
 package com.markov.rates_collector.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "exchange_rates")
 public class ExchangeRate {
+    private UUID id;
     private String currency;
     private BigDecimal rate;
 
@@ -19,6 +18,15 @@ public class ExchangeRate {
     }
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     @Column(name = "currency", nullable = false)
     public String getCurrency() {
         return currency;
