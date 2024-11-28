@@ -4,15 +4,16 @@ spring:
   jpa:
     properties:
       hibernate:
+        default-schema: 'app_schema'
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: 'TRUE'
     hibernate:
       ddl-auto: create-drop
   datasource:
     driverClassName: org.postgresql.Driver
-    password: ${password}
-    username: ${username}
-    url: jdbc:postgresql://localhost:5432/is_project?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+    username: postgres
+    password: 12345
+    url: jdbc:postgresql://localhost:5432/json_api?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
 logging:
   level:
     org:
