@@ -1,5 +1,6 @@
 package com.markov.rates_collector.controller;
 
+import com.markov.rates_collector.dto.CurrentCurrencyRecordResponseDTO;
 import com.markov.rates_collector.service.ExchangeRateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,10 @@ public class CurrencyRatesController {
         this.exchangeRateService = exchangeRateService;
     }
 
-    @GetMapping("current")
-    public ResponseEntity<> getCurrentRecordsForCurrency (@RequestParam(name = "currency") String currencyName) {
-        
+    @GetMapping("/current")
+    public ResponseEntity<CurrentCurrencyRecordResponseDTO> getCurrentRecordsForCurrency (@RequestParam(name = "currency") String currencyName) {
+        CurrentCurrencyRecordResponseDTO lastCurrencyRecordFor = exchangeRateService.getLastCurrencyRecordFor(currencyName);
+
+        return ResponseEntity.ok().body(lastCurrencyRecordFor);
     }
 }

@@ -1,6 +1,8 @@
 package com.markov.rates_collector.service.impl;
 
+import com.markov.rates_collector.dto.CurrentCurrencyRecordResponseDTO;
 import com.markov.rates_collector.dto.ExchangeRateResponseDTO;
+import com.markov.rates_collector.model.ExchangeRate;
 import com.markov.rates_collector.model.ExchangeRateRecord;
 import com.markov.rates_collector.model.mapper.ExchangeRateRecordMapper;
 import com.markov.rates_collector.repo.ExchangeRateRepo;
@@ -25,5 +27,18 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         exchangeRateRepo.flush();
 
         System.out.println(ratesRecord);
+    }
+
+    @Override
+    public CurrentCurrencyRecordResponseDTO getLastCurrencyRecordFor(String currencyName) {
+        ExchangeRate lastCurrencyRecord = this.exchangeRateRepo.findLastCurrencyRecord(currencyName).orElseGet(null);
+        return mapEntityToDTO(lastCurrencyRecord);
+    }
+
+    private CurrentCurrencyRecordResponseDTO mapEntityToDTO(ExchangeRate lastCurrencyRecord) {
+        CurrentCurrencyRecordResponseDTO currentCurrencyRecordResponseDTO = new CurrentCurrencyRecordResponseDTO();
+        return currentCurrencyRecordResponseDTO
+                .setRate(lastCurrencyRecord.getRate())
+                .setCurrency(lastCurrencyRecord.getCurrency());
     }
 }
